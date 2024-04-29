@@ -1,0 +1,13 @@
+---
+- name: Populate service facts
+  ansible.builtin.service_facts:
+
+- debug:
+    msg: "WARNING: nifi-registry service was not detected, skipping adding handler on restart"
+  when: "not ansible_facts.services is defined or not 'nifi-registry' in ansible_facts.services"
+
+- name: Re/Start NiFi Registry
+  service:
+    name: nifi-registry
+    state: restarted
+  when: "ansible_facts.services is defined and 'nifi-registry' in ansible_facts.services"
