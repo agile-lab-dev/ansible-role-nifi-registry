@@ -1,12 +1,12 @@
 ---
 - name: Prepare system
-  include: prepare.yml
+  import_tasks: prepare.yml
 
 - name: Install NiFi Registry
-  include: install.yml
+  import_tasks: install.yml
 
 - name: Customize NiFi Registry
-  include: customize.yml
+  import_tasks: customize.yml
 
 - name: Run NiFi Registry as system service
-  include: run.yml
+  import_tasks: run.yml
