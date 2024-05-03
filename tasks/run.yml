@@ -1,20 +1,11 @@
 ---
-- name: Populate service facts
-  ansible.builtin.service_facts:
-
-- debug:
-    msg: "WARNING: systemd was not detected, skipping adding nifi-registry to services"
-  when: "not ansible_facts.services is defined or not 'systemd' in ansible_facts.services"
-
 - name: Copy systemd template
   template:
     src: "templates/nifi-registry.service.j2"
     dest: "/etc/systemd/system/nifi-registry.service"
-  when: "ansible_facts.services is defined and 'systemd' in ansible_facts.services"
 
 - name: Enable NiFi Registry service
   systemd:
     name: nifi-registry
     daemon_reload: yes
     enabled: yes
-  when: "ansible_facts.services is defined and 'systemd' in ansible_facts.services"
