@@ -12,6 +12,7 @@ nifi_registry_user: nifireg
 nifi_registry_group: nifireg
 
 nifi_registry_config_dirs:
+  binaries: /tmp
   install: /opt/nifi-registry/releases
   home: /opt/nifi-registry/releases/current
   external_config: /opt/nifi-registry/config_resources
