@@ -35,6 +35,7 @@
     path: "{{ nifi_registry_config_dirs.home }}/conf/logback.xml"
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
+    pretty_print: yes
   with_dict: "{{ logback }}"
   notify: restart_nifi_registry
 
@@ -50,6 +51,7 @@
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
+        pretty_print: yes
       with_dict: "{{ identity_providers }}"
       notify: restart_nifi_registry
   when: identity_providers['/identityProviders/provider/identifier'] | length
@@ -66,14 +68,16 @@
         path: "{{ nifi_registry_config_dirs.home }}/conf/authorizers.xml"
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
+        pretty_print: yes
       with_dict: "{{ authorizers }}"
+      notify: restart_nifi_registry
   when: authorizers['/authorizers/userGroupProvider/identifier'] | length
-  notify: restart_nifi_registry
 
 - name: Update providers.xml
   xml:
     path: "{{ nifi_registry_config_dirs.home }}/conf/providers.xml"
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
+    pretty_print: yes
   with_dict: "{{ providers }}"
   notify: restart_nifi_registry
