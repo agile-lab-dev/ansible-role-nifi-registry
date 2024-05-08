@@ -1,7 +1,7 @@
 ---
 - name: Check if NiFi Registry binary exists
   stat:
-    path: "{{ nifi_registry_config_dirs.binaries }}/nifi-{{ nifi_registry_version }}-bin.zip"
+    path: "{{ nifi_registry_config_dirs.binaries }}/nifi-registry-{{ nifi_registry_version }}-bin.zip"
     get_attributes: no
     get_checksum: no
     get_mime: no
