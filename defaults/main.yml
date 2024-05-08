@@ -20,33 +20,33 @@ nifi_registry_config_dirs:
 # Specify any property from nifi-registry.properties here.
 nifi_registry_properties:
   nifi.registry.web.http.port: 18080
-  nifi.registry.security.identity.provider: "{{ identity_providers['/identityProviders/provider/identifier'] }}"
+  nifi.registry.security.identity.provider: "{{ nifi_registry_identity_providers['/identityProviders/provider/identifier'] }}"
   nifi.registry.db.url: "jdbc:h2:{{ nifi_registry_config_dirs.external_config }}/database/nifi-registry-primary;AUTOCOMMIT=OFF;DB_CLOSE_ON_EXIT=FALSE;LOCK_MODE=3;LOCK_TIMEOUT=25000;WRITE_DELAY=0;AUTO_SERVER=FALSE"
 
 # Specify any property from bootstrap.conf here.
-bootstrap:
+nifi_registry_bootstrap:
   java.arg.2: -Xms512m
   java.arg.3: -Xmx512m
 
 # Specify any property from logback.xml here.
 # Use XPath expressions as keys.
-logback:
+nifi_registry_logback:
   /configuration/appender[@name="APP_FILE"]/rollingPolicy/timeBasedFileNamingAndTriggeringPolicy/maxFileSize: 100MB
   /configuration/appender[@name="APP_FILE"]/rollingPolicy/maxHistory: 30
 
 # Specify any property from identity-providers.xml here.
 # Use XPath expressions as keys.
-identity_providers:
+nifi_registry_identity_providers:
   # Can be one of 'ldap-provider' or 'kerberos-provider'. Leave blank for no RBAC.
   /identityProviders/provider/identifier: ""
 
 # Specify any property from authorizers.xml here.
 # Use XPath expressions as keys.
-authorizers:
+nifi_registry_authorizers:
   /authorizers/userGroupProvider/identifier: file-user-group-provider
   /authorizers/userGroupProvider/property[@name="Users File"]: "{{ nifi_registry_config_dirs.external_config }}/users.xml"
   /authorizers/accessPolicyProvider/property[@name="Authorizations File"]: "{{ nifi_registry_config_dirs.external_config }}/authorizations.xml"
 
-providers:
+nifi_registry_providers:
   /providers/flowPersistenceProvider/property[@name="Flow Storage Directory"]: "{{ nifi_registry_config_dirs.external_config }}/flow_storage"
   /providers/extensionBundlePersistenceProvider/property[@name="Extension Bundle Storage Directory"]: "{{ nifi_registry_config_dirs.external_config }}/extension_bundles"

@@ -40,11 +40,11 @@ Any key/value pair from a config file can be added to the following dicts. Dict 
 
 ```yaml
 nifi_registry_properties:
-bootstrap:
-logback:
-identity_providers:
-authorizers:
-providers:
+nifi_registry_bootstrap:
+nifi_registry_logback:
+nifi_registry_identity_providers:
+nifi_registry_authorizers:
+nifi_registry_providers:
 ```
 
 ## Dependencies
@@ -85,7 +85,7 @@ Secure single node NiFi Registry instance with LDAP:
         nifi.registry.security.truststoreType: JKS
         nifi.registry.security.truststorePasswd: truststorePassword
         nifi.registry.security.needClientAuth: false
-      identity_providers:
+      nifi_registry_identity_providers:
         /loginIdentityProviders/provider/identifier: ldap-provider
         /loginIdentityProviders/provider/property[@name="Authentication Strategy"]: SIMPLE
         /loginIdentityProviders/provider/property[@name="Manager DN"]: cn=nifi-registry,ou=people,dc=example,dc=com
@@ -93,7 +93,7 @@ Secure single node NiFi Registry instance with LDAP:
         /loginIdentityProviders/provider/property[@name="Url"]: ldap://hostname:port
         /loginIdentityProviders/provider/property[@name="User Search Base"]: OU=people,DC=example,DC=com
         /loginIdentityProviders/provider/property[@name="User Search Filter"]: sAMAccountName={0}
-      authorizers:
+      nifi_registry_authorizers:
         /authorizers/userGroupProvider/property[@name="Initial User Identity 1"]: cn=John Smith,ou=people,dc=example,dc=com
         /authorizers/accessPolicyProvider/property[@name="Initial Admin Identity"]: cn=John Smith,ou=people,dc=example,dc=com
 ```

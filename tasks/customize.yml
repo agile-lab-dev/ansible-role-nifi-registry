@@ -19,7 +19,7 @@
     path: "{{ nifi_registry_config_dirs.home }}/conf/bootstrap.conf"
     line: "{{ item.key }}={{ item.value }}"
     regexp: "^{{ item.key }}"
-  with_dict: "{{ bootstrap }}"
+  with_dict: "{{ nifi_registry_bootstrap }}"
   notify: restart_nifi_registry
 
 - name: Update nifi-registry-env.sh
@@ -36,7 +36,7 @@
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
-  with_dict: "{{ logback }}"
+  with_dict: "{{ nifi_registry_logback }}"
   notify: restart_nifi_registry
 
 - name: Update identity-providers.xml
@@ -44,7 +44,7 @@
     - name: Uncomment block in identity-providers.xml
       replace:
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
-        regexp: "^.*To enable the {{ identity_providers['/identityProviders/provider/identifier'] }}.*$"
+        regexp: "^.*To enable the {{ nifi_registry_identity_providers['/identityProviders/provider/identifier'] }}.*$"
         replace: ""
     - name: Update properties in identity-providers.xml
       xml:
@@ -52,16 +52,16 @@
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
         pretty_print: yes
-      with_dict: "{{ identity_providers }}"
+      with_dict: "{{ nifi_registry_identity_providers }}"
       notify: restart_nifi_registry
-  when: identity_providers['/identityProviders/provider/identifier'] | length
+  when: nifi_registry_identity_providers['/identityProviders/provider/identifier'] | length
   
 - name: Update authorizers.xml
   block:
     - name: Uncomment block in authorizers.xml
       replace:
         path: "{{ nifi_registry_config_dirs.home }}/conf/authorizers.xml"
-        regexp: "^.*To enable the {{ authorizers['/authorizers/userGroupProvider/identifier'] }}.*$"
+        regexp: "^.*To enable the {{ nifi_registry_authorizers['/authorizers/userGroupProvider/identifier'] }}.*$"
         replace: ""
     - name: Update properties in authorizers.xml
       xml:
@@ -69,9 +69,9 @@
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
         pretty_print: yes
-      with_dict: "{{ authorizers }}"
+      with_dict: "{{ nifi_registry_authorizers }}"
       notify: restart_nifi_registry
-  when: authorizers['/authorizers/userGroupProvider/identifier'] | length
+  when: nifi_registry_authorizers['/authorizers/userGroupProvider/identifier'] | length
 
 - name: Update providers.xml
   xml:
@@ -79,5 +79,5 @@
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
     pretty_print: yes
-  with_dict: "{{ providers }}"
+  with_dict: "{{ nifi_registry_providers }}"
   notify: restart_nifi_registry
