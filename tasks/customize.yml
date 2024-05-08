@@ -12,6 +12,7 @@
     line: "{{ item.key }}={{ item.value }}"
     regexp: "^{{ item.key }}"
   with_dict: "{{ nifi_registry_properties }}"
+  notify: restart_nifi_registry
 
 - name: Update bootstrap.conf
   lineinfile:
@@ -19,6 +20,15 @@
     line: "{{ item.key }}={{ item.value }}"
     regexp: "^{{ item.key }}"
   with_dict: "{{ bootstrap }}"
+  notify: restart_nifi_registry
+
+- name: Update nifi-registry-env.sh
+  lineinfile:
+    path: "{{ nifi_config_dirs.home }}/bin/nifi-registry-env.sh"
+    line: "export {{ item.key }}={{ item.value }}"
+    regexp: "^export {{ item.key }}="
+  with_dict: "{{ nifi_registry_env }}"
+  notify: restart_nifi_registry
 
 - name: Update logback.xml
   xml:
@@ -26,6 +36,7 @@
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
   with_dict: "{{ logback }}"
+  notify: restart_nifi_registry
 
 - name: Update identity-providers.xml
   block:
@@ -41,6 +52,7 @@
         value: "{{ item.value }}"
       with_dict: "{{ identity_providers }}"
   when: identity_providers['/identityProviders/provider/identifier'] | length
+  notify: restart_nifi_registry
 
 - name: Update authorizers.xml
   block:
@@ -56,6 +68,7 @@
         value: "{{ item.value }}"
       with_dict: "{{ authorizers }}"
   when: authorizers['/authorizers/userGroupProvider/identifier'] | length
+  notify: restart_nifi_registry
 
 - name: Update providers.xml
   xml:
@@ -63,3 +76,4 @@
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
   with_dict: "{{ providers }}"
+  notify: restart_nifi_registry
