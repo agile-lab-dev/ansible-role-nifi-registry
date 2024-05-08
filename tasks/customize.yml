@@ -24,7 +24,7 @@
 
 - name: Update nifi-registry-env.sh
   lineinfile:
-    path: "{{ nifi_config_dirs.home }}/bin/nifi-registry-env.sh"
+    path: "{{ nifi_registry_config_dirs.home }}/bin/nifi-registry-env.sh"
     line: "export {{ item.key }}={{ item.value }}"
     regexp: "^export {{ item.key }}="
   with_dict: "{{ nifi_registry_env }}"
