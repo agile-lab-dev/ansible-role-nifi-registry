@@ -51,9 +51,9 @@
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
       with_dict: "{{ identity_providers }}"
+      notify: restart_nifi_registry
   when: identity_providers['/identityProviders/provider/identifier'] | length
-  notify: restart_nifi_registry
-
+  
 - name: Update authorizers.xml
   block:
     - name: Uncomment block in authorizers.xml
