@@ -12,54 +12,72 @@
     line: "{{ item.key }}={{ item.value }}"
     regexp: "^{{ item.key }}"
   with_dict: "{{ nifi_registry_properties }}"
+  notify: restart_nifi_registry
 
 - name: Update bootstrap.conf
   lineinfile:
     path: "{{ nifi_registry_config_dirs.home }}/conf/bootstrap.conf"
     line: "{{ item.key }}={{ item.value }}"
     regexp: "^{{ item.key }}"
-  with_dict: "{{ bootstrap }}"
+  with_dict: "{{ nifi_registry_bootstrap }}"
+  notify: restart_nifi_registry
+
+- name: Update nifi-registry-env.sh
+  lineinfile:
+    path: "{{ nifi_registry_config_dirs.home }}/bin/nifi-registry-env.sh"
+    line: "export {{ item.key }}={{ item.value }}"
+    regexp: "^export {{ item.key }}="
+  with_dict: "{{ nifi_registry_env }}"
+  notify: restart_nifi_registry
 
 - name: Update logback.xml
   xml:
     path: "{{ nifi_registry_config_dirs.home }}/conf/logback.xml"
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
-  with_dict: "{{ logback }}"
+    pretty_print: yes
+  with_dict: "{{ nifi_registry_logback }}"
+  notify: restart_nifi_registry
 
 - name: Update identity-providers.xml
   block:
     - name: Uncomment block in identity-providers.xml
       replace:
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
-        regexp: "^.*To enable the {{ identity_providers['/identityProviders/provider/identifier'] }}.*$"
+        regexp: "^.*To enable the {{ nifi_registry_identity_providers['/identityProviders/provider/identifier'] }}.*$"
         replace: ""
     - name: Update properties in identity-providers.xml
       xml:
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
-      with_dict: "{{ identity_providers }}"
-  when: identity_providers['/identityProviders/provider/identifier'] | length
-
+        pretty_print: yes
+      with_dict: "{{ nifi_registry_identity_providers }}"
+      notify: restart_nifi_registry
+  when: nifi_registry_identity_providers['/identityProviders/provider/identifier'] | length
+  
 - name: Update authorizers.xml
   block:
     - name: Uncomment block in authorizers.xml
       replace:
         path: "{{ nifi_registry_config_dirs.home }}/conf/authorizers.xml"
-        regexp: "^.*To enable the {{ authorizers['/authorizers/userGroupProvider/identifier'] }}.*$"
+        regexp: "^.*To enable the {{ nifi_registry_authorizers['/authorizers/userGroupProvider/identifier'] }}.*$"
         replace: ""
     - name: Update properties in authorizers.xml
       xml:
         path: "{{ nifi_registry_config_dirs.home }}/conf/authorizers.xml"
         xpath: "{{ item.key }}"
         value: "{{ item.value }}"
-      with_dict: "{{ authorizers }}"
-  when: authorizers['/authorizers/userGroupProvider/identifier'] | length
+        pretty_print: yes
+      with_dict: "{{ nifi_registry_authorizers }}"
+      notify: restart_nifi_registry
+  when: nifi_registry_authorizers['/authorizers/userGroupProvider/identifier'] | length
 
 - name: Update providers.xml
   xml:
     path: "{{ nifi_registry_config_dirs.home }}/conf/providers.xml"
     xpath: "{{ item.key }}"
     value: "{{ item.value }}"
-  with_dict: "{{ providers }}"
+    pretty_print: yes
+  with_dict: "{{ nifi_registry_providers }}"
+  notify: restart_nifi_registry
