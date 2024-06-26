@@ -1,4 +1,12 @@
 ---
+- name: Copy tls files
+  copy:
+    src: /tmp/tls
+    dest: "{{ nifi_registry_config_dirs.home}}/conf/"
+    owner: "{{ nifi_registry_user }}"
+    group: "{{ nifi_registry_group }}"
+    mode: '0644'
+
 - name: Create shared resources directory
   file:
     path: "{{ nifi_registry_config_dirs.external_config }}"
