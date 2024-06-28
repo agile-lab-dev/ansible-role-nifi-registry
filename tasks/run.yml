@@ -7,6 +7,7 @@
 - name: Enable NiFi Registry service
   systemd:
     name: nifi-registry
+    state: restarted
     daemon_reload: yes
     enabled: yes
-    state: restarted
+    
