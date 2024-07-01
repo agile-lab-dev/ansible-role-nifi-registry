@@ -1,4 +1,10 @@
 ---
+- name: Get NiFi Registry UserID
+  become: true
+  become_user: "{{ nifi_registry_user }}"
+  command: id -u
+  register: myuid_nifi_registry
+
 - name: Create shared resources directory
   file:
     path: "{{ nifi_registry_config_dirs.external_config }}"

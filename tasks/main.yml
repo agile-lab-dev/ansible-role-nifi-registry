@@ -1,12 +1,20 @@
 ---
 - name: Prepare system
+  become: yes
   import_tasks: prepare.yml
+  tags:
+  - root
 
 - name: Install NiFi Registry
   import_tasks: install.yml
 
 - name: Customize NiFi Registry
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
   import_tasks: customize.yml
 
 - name: Run NiFi Registry as system service
+  become: yes
   import_tasks: run.yml
+  tags:
+  - root

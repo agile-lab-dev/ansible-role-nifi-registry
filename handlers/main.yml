@@ -1,6 +1,13 @@
 ---
 - name: restart_nifi_registry
+  become: yes
+  # become_user: "{{ nifi_registry_user }}"
   systemd:
     name: nifi-registry
     state: restarted
-    daemon_reload: yes
+  #   scope: user
+  # environment:
+  #   XDG_RUNTIME_DIR: "/run/user/{{ myuid_nifi_registry.stdout }}"
+  tags:
+  - root
+  - no-root
