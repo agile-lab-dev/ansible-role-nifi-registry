@@ -12,10 +12,10 @@
 #   - root
 #   - no-root
 
-- name: restart_nifi
+- name: restart_nifi_registry
   become: yes
-  become_user: "{{ nifi_user }}"
-  command: sudo systemctl restart nifi
+  become_user: "{{ nifi_registry_user }}"
+  command: sudo systemctl restart nifi-registry
   tags:
   - root
   - no-root
