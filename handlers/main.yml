@@ -1,21 +1,18 @@
 ---
-- name: restart_nifi_registry
-  become: yes
-  #become_user: "{{ nifi_registry_user }}"
-  systemd:
-    name: nifi-registry
-    state: restarted
-  #   scope: user
-  # environment:
-  #   XDG_RUNTIME_DIR: "/run/user/{{ myuid_nifi_registry.stdout }}"
-  tags:
-  - root
-  # - no-root
-
+# Performs the restart of the service as root
 # - name: restart_nifi_registry
 #   become: yes
-#   become_user: "{{ nifi_registry_user }}"
-#   command: sudo systemctl restart nifi-registry
+#   systemd:
+#     name: nifi-registry
+#     state: restarted
 #   tags:
 #   - root
 #   - no-root
+
+- name: restart_nifi_registry
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
+  command: sudo systemctl restart nifi-registry
+  tags:
+  - root
+  - no-root
