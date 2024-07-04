@@ -12,6 +12,9 @@
   become: yes
   become_user: "{{ nifi_registry_user }}"
   import_tasks: customize.yml
+  tags:
+  - root
+  - no-root
 
 - name: Run NiFi Registry as system service
   become: yes

@@ -1,14 +1,4 @@
 ---
-# Performs the restart of the service as root
-# - name: restart_nifi_registry
-#   become: yes
-#   systemd:
-#     name: nifi-registry
-#     state: restarted
-#   tags:
-#   - root
-#   - no-root
-
 - name: restart_nifi_registry
   become: yes
   become_user: "{{ nifi_registry_user }}"
