@@ -28,6 +28,10 @@ nifi_registry_bootstrap:
   java.arg.2: -Xms512m
   java.arg.3: -Xmx512m
 
+# Specify any property from nifi-env.sh here.
+nifi_registry_env:
+  NIFI_REGISTRY_HOME: "{{ nifi_registry_config_dirs.home }}"
+
 # Specify any property from logback.xml here.
 # Use XPath expressions as keys.
 nifi_registry_logback:

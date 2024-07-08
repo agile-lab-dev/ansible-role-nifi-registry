@@ -1,19 +1,31 @@
 ---
 - name: Check if NiFi Registry binary exists
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
   stat:
     path: "{{ nifi_registry_config_dirs.binaries }}/nifi-registry-{{ nifi_registry_version }}-bin.zip"
     get_attributes: no
     get_checksum: no
     get_mime: no
   register: zip_file
+  tags:
+  - root
+  - no-root
 
 - name: Download NiFi Registry binary
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
   get_url:
     url: "{{ download_mirror_uri }}/nifi/{{ nifi_registry_version }}/nifi-registry-{{ nifi_registry_version }}-bin.zip"
     dest: "{{ nifi_registry_config_dirs.binaries }}/nifi-registry-{{ nifi_registry_version }}-bin.zip"
   when: not zip_file.stat.exists
+  tags:
+  - root
+  - no-root
 
 - name: Unpack NiFi Registry binary
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
   unarchive:
     remote_src: "yes"
     src: "{{ nifi_registry_config_dirs.binaries }}/nifi-registry-{{ nifi_registry_version }}-bin.zip"
@@ -21,18 +33,40 @@
     owner: "{{ nifi_registry_user }}"
     group: "{{ nifi_registry_group }}"
     creates: "{{ nifi_registry_config_dirs.install }}/nifi-registry-{{ nifi_registry_version }}"
+  tags:
+  - root
+  - no-root
+
+- name: Fix permissions for lineinfile
+  become: yes
+  file:
+    path: "/tmp/.ansible"
+    state: directory
+    owner: "{{ nifi_registry_user }}"
+    group: "{{ nifi_registry_group }}"
+    recurse: "yes"
+  tags:
+  - root
 
 - name: Fix permissions
+  become: yes
   file:
     path: "{{ nifi_registry_config_dirs.install }}/nifi-registry-{{ nifi_registry_version }}"
     owner: "{{ nifi_registry_user }}"
     group: "{{ nifi_registry_group }}"
     recurse: "yes"
+  tags:
+  - root
 
 - name: Create NiFi Registry symlink
+  become: yes
+  become_user: "{{ nifi_registry_user }}"
   file:
     src: "nifi-registry-{{ nifi_registry_version }}"
     path: "{{ nifi_registry_config_dirs.home }}"
     state: "link"
     owner: "{{ nifi_registry_user }}"
     group: "{{ nifi_registry_group }}"
+  tags:
+  - root
+  - no-root
