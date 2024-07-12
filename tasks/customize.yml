@@ -10,7 +10,7 @@
   lineinfile:
     path: "{{ nifi_registry_config_dirs.home }}/conf/nifi-registry.properties"
     line: "{{ item.key }}={{ item.value }}"
-    regexp: "^{{ item.key }}"
+    regexp: "^{{ item.key }}="
   with_dict: "{{ nifi_registry_properties }}"
   notify: restart_nifi_registry
 
@@ -18,7 +18,7 @@
   lineinfile:
     path: "{{ nifi_registry_config_dirs.home }}/conf/bootstrap.conf"
     line: "{{ item.key }}={{ item.value }}"
-    regexp: "^{{ item.key }}"
+    regexp: "^{{ item.key }}="
   with_dict: "{{ nifi_registry_bootstrap }}"
   notify: restart_nifi_registry
 
