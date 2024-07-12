@@ -37,17 +37,6 @@
   - root
   - no-root
 
-- name: Fix permissions for lineinfile
-  become: yes
-  file:
-    path: "/tmp/.ansible"
-    state: directory
-    owner: "{{ nifi_registry_user }}"
-    group: "{{ nifi_registry_group }}"
-    recurse: "yes"
-  tags:
-  - root
-
 - name: Fix permissions
   become: yes
   file:
