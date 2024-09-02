@@ -46,6 +46,11 @@
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
         regexp: "^.*To enable the {{ nifi_registry_identity_providers['/identityProviders/provider/identifier'] }}.*$"
         replace: ""
+    - name: Uncomment block in identity-providers.xml second line
+      replace:
+        path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
+        regexp: "^.*To enable the kerberos-provider .*$"
+        replace: ""
     - name: Update properties in identity-providers.xml
       xml:
         path: "{{ nifi_registry_config_dirs.home }}/conf/identity-providers.xml"
